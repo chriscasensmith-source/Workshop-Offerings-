@@ -4,6 +4,11 @@ import { CategoryFilters } from './components/CategoryFilters';
 import { CourseDetail } from './components/CourseDetail';
 import { CourseGrid } from './components/CourseGrid';
 import { DurationFilters } from './components/DurationFilters';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { HowItWorks } from './components/HowItWorks';
+import { RegistrationCTA } from './components/RegistrationCTA';
 import { SearchBar } from './components/SearchBar';
 import { courses } from './data/courses';
 import { filterCourses } from './lib/filterCourses';
@@ -38,8 +43,15 @@ export default function App() {
   };
 
   return (
-    <main>
-      <section id="courses" className="catalog-section" aria-labelledby="catalog-heading">
+    <>
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
+      <Header />
+      <main id="main-content">
+        <div id="top" />
+        <Hero />
+        <section id="courses" className="catalog-section" aria-labelledby="catalog-heading">
         <div className="section-shell">
           <div className="section-heading-row">
             <div>
@@ -69,14 +81,18 @@ export default function App() {
             onViewDetails={openCourse}
           />
         </div>
-      </section>
-      <CourseDetail
-        course={selectedCourse}
-        onOpenChange={(open) => {
-          if (!open) setSelectedCourse(null);
-        }}
-        returnFocus={detailTrigger}
-      />
-    </main>
+        </section>
+        <HowItWorks />
+        <RegistrationCTA />
+        <CourseDetail
+          course={selectedCourse}
+          onOpenChange={(open) => {
+            if (!open) setSelectedCourse(null);
+          }}
+          returnFocus={detailTrigger}
+        />
+      </main>
+      <Footer />
+    </>
   );
 }

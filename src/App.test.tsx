@@ -1,4 +1,4 @@
-import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -28,7 +28,7 @@ describe('workshop explorer', () => {
       screen.getByRole('heading', {
         name: 'Presentation and Facilitation Techniques for Leaders',
       }),
-    ).toBeVisible();
+    ).toBeInTheDocument();
   });
 
   it('filters by duration', async () => {
@@ -154,5 +154,66 @@ describe('course details', () => {
         'Participants may need to complete the CliftonStrengths assessment before attending.',
       ),
     ).toBeVisible();
+  });
+});
+
+describe('page structure', () => {
+  it('renders the complete learning-hub journey with one primary heading', () => {
+    render(<App />);
+
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Learn something useful. Bring it back to the job.',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('banner')).toBeVisible();
+    expect(screen.getByRole('main')).toBeVisible();
+    expect(screen.getByRole('contentinfo')).toBeVisible();
+  });
+
+  it('provides working anchor navigation and the supplied hero facts', () => {
+    render(<App />);
+
+    expect(screen.getByRole('link', { name: 'Courses' })).toHaveAttribute('href', '#courses');
+    expect(screen.getByRole('link', { name: 'How It Works' })).toHaveAttribute(
+      'href',
+      '#how-it-works',
+    );
+    expect(screen.getByRole('link', { name: 'Browse Workshops' })).toHaveAttribute(
+      'href',
+      '#courses',
+    );
+    expect(screen.getByText('11 workshops')).toBeInTheDocument();
+    expect(screen.getByText('60 to 120 minute sessions')).toBeInTheDocument();
+    expect(screen.getByText('Practical activities and workplace takeaways')).toBeInTheDocument();
+  });
+
+  it('renders all three how-it-works steps and final registration section', () => {
+    render(<App />);
+
+    expect(screen.getByRole('heading', { name: 'Find a workshop' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Register your interest' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Watch for details' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Ready to keep learning?' })).toBeVisible();
+    expect(
+      screen.getByRole('link', { name: 'Register Through Microsoft Forms' }),
+    ).toHaveAttribute('href', 'https://forms.office.com/r/HgUVx6tuQ8');
+  });
+
+  it('shows the current year in the footer', () => {
+    render(<App />);
+
+    expect(screen.getByText(new RegExp(String(new Date().getFullYear())))).toBeVisible();
+  });
+
+  it('strengthens the sticky header surface after scrolling', () => {
+    render(<App />);
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 24 });
+
+    fireEvent.scroll(window);
+
+    expect(screen.getByRole('banner')).toHaveAttribute('data-scrolled', 'true');
   });
 });

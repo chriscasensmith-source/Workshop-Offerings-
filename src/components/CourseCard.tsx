@@ -1,6 +1,7 @@
 import { ArrowUpRight, Clock3, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Course } from '../types/course';
+import { CourseIcon } from './CourseIcon';
 import { RegistrationLink } from './RegistrationLink';
 
 interface CourseCardProps {
@@ -22,7 +23,10 @@ export function CourseCard({ course, onViewDetails }: CourseCardProps) {
     >
       <div className="card-accent" aria-hidden="true" />
       <div className="card-meta-row">
-        <span className="category-tag">{course.category}</span>
+        <span className="category-tag">
+          <CourseIcon name={course.icon} size={16} />
+          {course.category}
+        </span>
         <span className="duration">
           <Clock3 aria-hidden="true" size={15} />
           {course.duration}
