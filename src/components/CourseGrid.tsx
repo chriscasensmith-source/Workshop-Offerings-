@@ -6,7 +6,7 @@ import { CourseCard } from './CourseCard';
 interface CourseGridProps {
   courses: Course[];
   onReset: () => void;
-  onViewDetails: (course: Course) => void;
+  onViewDetails: (course: Course, trigger: HTMLButtonElement) => void;
 }
 
 export function CourseGrid({ courses, onReset, onViewDetails }: CourseGridProps) {

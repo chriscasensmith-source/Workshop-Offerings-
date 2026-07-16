@@ -90,3 +90,69 @@ describe('workshop explorer', () => {
     }
   });
 });
+
+describe('course details', () => {
+  it('opens complete details and closes with Escape while returning focus', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const trigger = screen.getByRole('button', {
+      name: 'View details for Emotional Intelligence: The RULER Framework',
+    });
+
+    await user.click(trigger);
+
+    const dialog = screen.getByRole('dialog', { name: 'Emotional Intelligence: The RULER Framework' });
+    expect(within(dialog).getByText('Recognize emotional signals in yourself and others')).toBeVisible();
+    expect(within(dialog).getByText(/participant outcome/i)).toBeVisible();
+
+    await user.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('closes with the visible close button', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'View details for Team Building 101',
+      }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Close course details' }));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('closes when the backdrop is selected', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'View details for Team Building 101',
+      }),
+    );
+    await user.click(screen.getByTestId('course-detail-overlay'));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('shows the course-specific CliftonStrengths note', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'View details for CliftonStrengths Team Workshop',
+      }),
+    );
+
+    expect(
+      screen.getByText(
+        'Participants may need to complete the CliftonStrengths assessment before attending.',
+      ),
+    ).toBeVisible();
+  });
+});

@@ -5,7 +5,7 @@ import { RegistrationLink } from './RegistrationLink';
 
 interface CourseCardProps {
   course: Course;
-  onViewDetails: (course: Course) => void;
+  onViewDetails: (course: Course, trigger: HTMLButtonElement) => void;
 }
 
 export function CourseCard({ course, onViewDetails }: CourseCardProps) {
@@ -41,7 +41,12 @@ export function CourseCard({ course, onViewDetails }: CourseCardProps) {
         </span>
       </p>
       <div className="card-actions">
-        <button type="button" className="button button-secondary" onClick={() => onViewDetails(course)}>
+        <button
+          type="button"
+          className="button button-secondary"
+          aria-label={`View details for ${course.title}`}
+          onClick={(event) => onViewDetails(course, event.currentTarget)}
+        >
           View Details
           <ArrowUpRight aria-hidden="true" size={16} />
         </button>

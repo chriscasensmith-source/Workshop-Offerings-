@@ -1,17 +1,20 @@
 import { RotateCcw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { CategoryFilters } from './components/CategoryFilters';
+import { CourseDetail } from './components/CourseDetail';
 import { CourseGrid } from './components/CourseGrid';
 import { DurationFilters } from './components/DurationFilters';
 import { SearchBar } from './components/SearchBar';
 import { courses } from './data/courses';
 import { filterCourses } from './lib/filterCourses';
-import type { CategoryFilter, DurationFilter } from './types/course';
+import type { CategoryFilter, Course, DurationFilter } from './types/course';
 
 export default function App() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<CategoryFilter>('All Workshops');
   const [duration, setDuration] = useState<DurationFilter>('all');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [detailTrigger, setDetailTrigger] = useState<HTMLButtonElement | null>(null);
 
   const filteredCourses = useMemo(
     () => filterCourses(courses, { query, category, duration }),
@@ -28,6 +31,11 @@ export default function App() {
   const resultLabel = `${filteredCourses.length} ${
     filteredCourses.length === 1 ? 'workshop' : 'workshops'
   } found`;
+
+  const openCourse = (course: Course, trigger: HTMLButtonElement) => {
+    setDetailTrigger(trigger);
+    setSelectedCourse(course);
+  };
 
   return (
     <main>
@@ -58,10 +66,17 @@ export default function App() {
           <CourseGrid
             courses={filteredCourses}
             onReset={resetFilters}
-            onViewDetails={() => undefined}
+            onViewDetails={openCourse}
           />
         </div>
       </section>
+      <CourseDetail
+        course={selectedCourse}
+        onOpenChange={(open) => {
+          if (!open) setSelectedCourse(null);
+        }}
+        returnFocus={detailTrigger}
+      />
     </main>
   );
 }
