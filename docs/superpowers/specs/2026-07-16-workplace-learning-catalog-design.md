@@ -96,7 +96,7 @@ Filter state remains local to the page. URL parameters are intentionally omitted
 
 ## Registration Behavior
 
-The registration URL comes exclusively from `VITE_MICROSOFT_FORM_URL`.
+The registration URL comes exclusively from `VITE_MICROSOFT_FORM_URL`. The initial configured value is `https://forms.office.com/r/HgUVx6tuQ8`.
 
 When configured, every registration action renders as an external link with `target="_blank"` and `rel="noopener noreferrer"`. Buttons include descriptive accessible names. When missing, the app uses a clearly marked placeholder URL constant and identifies the link as needing configuration without building an internal registration form.
 
@@ -197,4 +197,4 @@ Final verification runs lint, all automated tests, and the production build. Bro
 
 ## Required User Configuration
 
-The site is complete with a clearly labeled registration placeholder. The only required content configuration is the real Microsoft Form URL. Publishing also requires granting the GitHub app or local Git credentials access to `chriscasensmith-source/Workshop-Offerings-`, pushing the generated files, and enabling GitHub Pages with GitHub Actions as its source.
+The Microsoft Form response URL is supplied. Publishing still requires granting the GitHub app or local Git credentials access to `chriscasensmith-source/Workshop-Offerings-`, pushing the generated files, and enabling GitHub Pages with GitHub Actions as its source.
